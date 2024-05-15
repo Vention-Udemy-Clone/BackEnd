@@ -1,8 +1,7 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { LessonsService } from './lessons.service';
 import { CreateLessonDto } from './dto/create-lesson.dto';
 import { UpdateLessonDto } from './dto/update-lesson.dto';
-import { HttpException, HttpStatus } from '@nestjs/common';
 
 @Controller('lessons')
 export class LessonsController {
@@ -10,40 +9,25 @@ export class LessonsController {
 
   @Post(':moduleId')
   async createLesson(@Param('moduleId') moduleId: string, @Body() createLessonDto: CreateLessonDto) {
-    try {
-      return await this.lessonsService.createLesson(moduleId, createLessonDto);
-    } catch (error) {
-      throw new HttpException({
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
-        error: 'There was a problem creating the lesson',
-      }, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+      const createdLesson = await this.lessonsService.createLesson(moduleId, createLessonDto);
+      return { success: true, data: createdLesson }
   }
 
   @Get(':id')
   async getLessonById(@Param('id') id: string) {
-    try {
-      return this.lessonsService.getLessonById(id);
-    } catch (error) {
-      throw new NotFoundException(error.message);
-    }
+      const gotLesson = await this.lessonsService.getLessonById(id);
+      return { success: true, data: gotLesson }
   }
 
   @Patch(':id')
   async updateLesson(@Param('id') id: string, @Body() updateLessonDto: UpdateLessonDto) {
-    try {
-      return this.lessonsService.updateLesson(id, updateLessonDto);
-    } catch (error) {
-      throw new NotFoundException(error.message);
-    }
+      const updatedLesson = await this.lessonsService.updateLesson(id, updateLessonDto);
+      return { success: true, data: updatedLesson };
   }
 
   @Delete(':id')
   async deleteLesson(@Param('id') id: string) {
-    try {
-      return this.lessonsService.deleteLesson(id);
-    } catch (error) {
-      throw new NotFoundException(error.message);
-    }
+      const deletedModule = await this.lessonsService.deleteLesson(id);
+      return { success: true, data: deletedModule };
   }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, NotFoundException, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { ModulesService } from './modules.service';
 import { CreateModuleDto } from './dto/create-module.dto';
 import { UpdateModuleDto } from './dto/update-module.dto';
@@ -9,40 +9,25 @@ export class ModulesController {
 
   @Post(':courseId')
   async createModule(@Param('courseId') courseId: string, @Body() createModuleDto: CreateModuleDto) {
-    try {
-      return await this.modulesService.createModule(courseId, createModuleDto);
-    } catch (error) { 
-      throw new HttpException({
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
-        error: 'There was a problem creating the module',
-      }, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+      const createdModule = await this.modulesService.createModule(courseId, createModuleDto);
+      return { success: true, data: createdModule }
   }
 
   @Get(':id')
   async getModuleById(@Param('id') id: string) {
-    try {
-      return this.modulesService.getModuleById(id);
-    } catch (error) {
-      throw new NotFoundException(error.message);
-    }
+      const gotModule = await this.modulesService.getModuleById(id);
+      return { success: true, data: gotModule }
   }
 
   @Patch(':id')
   async updateModule(@Param('id') id: string, @Body() updateModuleDto: UpdateModuleDto) {
-    try {
-      return this.modulesService.updateModule(id, updateModuleDto);
-    } catch (error) {
-      throw new NotFoundException(error.message);
-    }
+      const updatedModule = await this.modulesService.updateModule(id, updateModuleDto);
+      return { success: true, data: updatedModule }
   }
 
   @Delete(':id')
   async deleteModule(@Param('id') id: string) {
-    try {
-      return this.modulesService.deleteModule(id);
-    } catch (error) {
-      throw new NotFoundException(error.message);
-    }
+      const deletedModule = await this.modulesService.deleteModule(id);
+      return { success: true, data: deletedModule }
   }
 }
