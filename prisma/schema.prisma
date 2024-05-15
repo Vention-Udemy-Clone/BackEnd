@@ -16,29 +16,57 @@ datasource db {
 enum Status {
   DRAFT
   PUBLISHED
+  ARCHIVED
+}
+
+enum Role {
+  ADMIN
+  TUTOR
+  USER
+}
+
+enum Level {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
 }
 
 model User {
+  id           String         @id @default(cuid())
+  email        String         @unique
+  role         Role           @default(USER)
+  fullName     String
+  avatarUrl    String?
+  password     String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  Course       Course[]
+  UserOnCourse UserOnCourse[]
+}
+
+model UserOnCourse {
   id        String   @id @default(cuid())
-  email     String   @unique
-  fullName  String
-  password  String
+  userId    String
+  courseId  String
+  user      User     @relation(fields: [userId], references: [id])
+  course    Course   @relation(fields: [courseId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Course    Course[]
 }
 
 model Course {
-  id          String        @id @default(cuid())
-  title       String
-  description String
-  authorId    String
-  author      User          @relation(fields: [authorId], references: [id])
-  status      Status        @default(DRAFT)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  Module      Module[]
-  TagOnCourse TagOnCourse[]
+  id           String         @id @default(cuid())
+  title        String
+  description  String
+  authorId     String
+  level        Level
+  author       User           @relation(fields: [authorId], references: [id])
+  status       Status         @default(DRAFT)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  Module       Module[]
+  TagOnCourse  TagOnCourse[]
+  UserOnCourse UserOnCourse[]
 }
 
 model Module {
@@ -52,14 +80,14 @@ model Module {
 }
 
 model Lesson {
-  id          String   @id @default(cuid())
-  title       String
-  description String?
-  content     String?
-  moduleId    String
-  module      Module   @relation(fields: [moduleId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  title     String
+  overview  String?
+  content   String?
+  moduleId  String
+  module    Module   @relation(fields: [moduleId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Tag {
