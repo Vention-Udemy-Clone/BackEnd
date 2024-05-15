@@ -10,7 +10,6 @@ async function main() {
       id: '1',
       email: 'admin@gmail.com',
       fullName: 'Admin',
-      password: 'admin',
       role: 'ADMIN' as Role,
       createdAt: new Date(),
       updatedAt: new Date(),

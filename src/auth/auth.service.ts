@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { registerDto } from './dto/create-auth.dto';
 
 const { ACCESS_TOKEN_KEY, ACCESS_TOKEN_TIME } = process.env;
 
@@ -10,10 +11,10 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
   ) {}
-  async register(createAuthDto: any) {
+  async register(registerDto: registerDto) {
     try {
       let userFromDb = await this.prisma.user.findUnique({
-        where: { email: createAuthDto.email },
+        where: { email: registerDto.email },
       });
 
       console.log(
@@ -23,7 +24,7 @@ export class AuthService {
       if (!userFromDb) {
         console.log('IF');
         userFromDb = await this.prisma.user.create({
-          data: createAuthDto,
+          data: registerDto,
         });
       }
 
@@ -34,7 +35,13 @@ export class AuthService {
         accessToken,
       );
 
-      return { accessToken };
+      return {
+        success: true,
+        data: {
+          accessToken,
+          id: userFromDb.id,
+        },
+      };
     } catch (error) {
       console.log(
         'file: auth.service.ts:35 ~ AuthService ~ register ~ error:',
@@ -73,9 +80,7 @@ export class AuthService {
         expiresIn: ACCESS_TOKEN_TIME,
       });
 
-      return {
-        accessToken: accessToken,
-      };
+      return accessToken;
     } catch (error) {
       throw new Error('Failed to generate token');
     }
