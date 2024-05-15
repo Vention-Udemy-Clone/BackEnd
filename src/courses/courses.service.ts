@@ -69,7 +69,7 @@ export class CoursesService {
   }
 
   async update(id: string, updateCourseDto: UpdateCourseDto) {
-    this.findOne(id);
+    await this.findOne(id);
 
     const courseData = {
       title: updateCourseDto.title,
