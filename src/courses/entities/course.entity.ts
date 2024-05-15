@@ -1,11 +1,16 @@
-import { Status } from '@prisma/client';
+import { Level, Status } from '@prisma/client';
 
 export class Course {
   id: string;
   title: string;
   description: string;
-  authorId: string;
   status: Status;
+  level: Level;
+  author: {
+    id: string;
+    fullName: string;
+    email: string;
+  };
   createdAt: Date;
   updatedAt: Date;
 }
