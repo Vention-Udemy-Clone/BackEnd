@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { GlobalException } from 'src/exceptions/global.exception';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { registerDto } from './dto/create-auth.dto';
 
@@ -17,23 +18,13 @@ export class AuthService {
         where: { email: registerDto.email },
       });
 
-      console.log(
-        'file: auth.service.ts:21 ~ AuthService ~ register ~ userFromDb:',
-        userFromDb,
-      );
       if (!userFromDb) {
-        console.log('IF');
         userFromDb = await this.prisma.user.create({
           data: registerDto,
         });
       }
 
       const accessToken = await this.getTokens(userFromDb.id, userFromDb.email);
-
-      console.log(
-        'file: auth.service.ts:25 ~ AuthService ~ register ~ accessToken:',
-        accessToken,
-      );
 
       return {
         success: true,
@@ -43,12 +34,7 @@ export class AuthService {
         },
       };
     } catch (error) {
-      console.log(
-        'file: auth.service.ts:35 ~ AuthService ~ register ~ error:',
-        error,
-      );
-
-      throw new Error('Register failed');
+      throw new GlobalException('Register failed', error);
     }
   }
 
