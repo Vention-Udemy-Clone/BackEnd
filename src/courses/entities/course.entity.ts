@@ -4,8 +4,13 @@ export class Course {
   id: string;
   title: string;
   description: string;
-  authorId: string;
   status: Status;
+  level: string;
+  author: {
+    id: string;
+    fullName: string;
+    email: string;
+  };
   createdAt: Date;
   updatedAt: Date;
 }
