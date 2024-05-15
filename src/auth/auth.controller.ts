@@ -8,15 +8,15 @@ import {
   Post,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { registerDto } from './dto/create-auth.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('')
-  register(@Body() createAuthDto: any) {
-    return this.authService.register(createAuthDto);
+  register(@Body() register: registerDto) {
+    return this.authService.register(register);
   }
 
   @Get()
@@ -30,7 +30,7 @@ export class AuthController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
+  update(@Param('id') id: string, @Body() updateAuthDto: any) {
     return this.authService.update(+id, updateAuthDto);
   }
 

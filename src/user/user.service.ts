@@ -25,7 +25,7 @@ export class UserService {
         throw new NotFoundException('User not found');
       }
 
-      return userFromDb;
+      return { success: true, data: userFromDb };
     } catch (error) {
       if (error instanceof NotFoundException) throw error;
       throw new GlobalException('Failed to get user', error);
