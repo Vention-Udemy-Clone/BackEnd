@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { courseMapper } from 'src/utils/courseMapper';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { Course, CoursesResponse } from './entities/course.entity';
@@ -39,12 +40,18 @@ export class CoursesService {
   async findAll(): Promise<CoursesResponse> {
     const [count, courses] = await this.prisma.$transaction([
       this.prisma.course.count(),
-      this.prisma.course.findMany(),
+      this.prisma.course.findMany({
+        include: {
+          author: true,
+        },
+      }),
     ]);
+
+    const courseData = courses.map((course) => courseMapper(course));
 
     return {
       count: count,
-      data: courses,
+      data: courseData,
     };
   }
 
@@ -52,6 +59,9 @@ export class CoursesService {
     const course = await this.prisma.course.findUnique({
       where: {
         id,
+      },
+      include: {
+        author: true,
       },
     });
 
@@ -65,7 +75,7 @@ export class CoursesService {
       );
     }
 
-    return course;
+    return courseMapper(course);
   }
 
   async update(id: string, updateCourseDto: UpdateCourseDto) {
