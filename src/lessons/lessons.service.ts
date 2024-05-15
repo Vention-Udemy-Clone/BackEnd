@@ -46,11 +46,8 @@ export class LessonsService {
   }
 
   async updateLesson(id: string, updateLessonDto: UpdateLessonDto) {
-    try {
-      const lesson = await this.getLessonById(id);
-
-      if (!lesson) throw new NotFoundException(`Lesson with id ${id} not found`);
-      
+    await this.getLessonById(id);
+    try {      
       const updatedLesson = await this.prisma.lesson.update({
         where: { id },
         data: updateLessonDto,
@@ -62,9 +59,8 @@ export class LessonsService {
   }
 
   async deleteLesson(id: string) {
+    await this.getLessonById(id);
     try {
-      const lesson = await this.getLessonById(id);
-      if (!lesson) throw new NotFoundException(`Lesson with id ${id} not found`);
       const deletedLesson = await this.prisma.lesson.delete({
         where: { id },
       });

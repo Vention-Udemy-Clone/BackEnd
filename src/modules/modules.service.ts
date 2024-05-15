@@ -46,10 +46,9 @@ export class ModulesService {
   }
 
   async updateModule(id: string, updateModuleDto: UpdateModuleDto) {
+    await this.getModuleById(id);
     try {
       const { title } = updateModuleDto;
-      const module = await this.getModuleById(id);
-      if (!module) throw new NotFoundException(`Module with id ${id} not found`);
       const updatedModule = await this.prisma.module.update({
         where: { id },
         data: { title },
@@ -61,9 +60,8 @@ export class ModulesService {
   }
 
   async deleteModule(id: string) {
+    await this.getModuleById(id);
     try {
-      const module = await this.getModuleById(id);
-      if (!module) throw new NotFoundException(`Module with id ${id} not found`);
       const deletedModule = await this.prisma.module.delete({
         where: { id },
       });
