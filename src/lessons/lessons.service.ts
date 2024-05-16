@@ -10,7 +10,7 @@ export class LessonsService {
 
   async createLesson(moduleId: string, createLessonDto: CreateLessonDto) {
     try {
-      const { title, description, content } = createLessonDto;
+      const { title, content } = createLessonDto;
       const module = await this.prisma.module.findUnique({
         where: { id: moduleId },
         include: { Lesson: true },
@@ -21,7 +21,6 @@ export class LessonsService {
       const lesson = await this.prisma.lesson.create({
         data: {
           title,
-          description,
           content,
           module: { connect: { id: moduleId } },
         },

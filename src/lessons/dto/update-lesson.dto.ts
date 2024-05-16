@@ -6,10 +6,6 @@ export class UpdateLessonDto {
   readonly title?: string;
 
   @IsOptional()
-  @IsString({ message: 'Description must be a string' })
-  readonly description?: string;
-
-  @IsOptional()
   @IsString({ message: 'Content must be a string' })
   readonly content?: string;
 }
