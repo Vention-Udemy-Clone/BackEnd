@@ -3,6 +3,7 @@ import { CreateModuleDto } from './dto/create-module.dto';
 import { UpdateModuleDto } from './dto/update-module.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GlobalException } from 'src/exceptions/global.exception';
+import { Module } from './entities/module.entity';
 
 @Injectable()
 export class ModulesService {
@@ -30,7 +31,7 @@ export class ModulesService {
     }
   }
 
-  async getModuleById(id: string) {
+  async getModuleById(id: string): Promise<Module> {
     try {
       const module = await this.prisma.module.findUnique({
         where: { id },

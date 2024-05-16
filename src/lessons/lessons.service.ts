@@ -3,6 +3,7 @@ import { CreateLessonDto } from './dto/create-lesson.dto';
 import { UpdateLessonDto } from './dto/update-lesson.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GlobalException } from 'src/exceptions/global.exception';
+import { Lesson } from '@prisma/client';
 
 @Injectable()
 export class LessonsService {
@@ -30,7 +31,7 @@ export class LessonsService {
         throw new GlobalException("Failed to create lesson", error.message);  }
   }
 
-  async getLessonById(id: string) {
+  async getLessonById(id: string): Promise<Lesson> {
     try {
       const lesson = await this.prisma.lesson.findUnique({
         where: { id },
