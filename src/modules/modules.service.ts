@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateModuleDto } from './dto/create-module.dto';
 import { UpdateModuleDto } from './dto/update-module.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { GlobalException } from 'src/exceptions/global-exception';
+import { GlobalException } from 'src/exceptions/global.exception';
 
 @Injectable()
 export class ModulesService {
@@ -41,6 +41,9 @@ export class ModulesService {
       }
       return module;
     } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
       throw new GlobalException("Failed to get module", error.message);
     }
   }

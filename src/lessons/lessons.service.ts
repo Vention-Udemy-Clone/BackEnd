@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateLessonDto } from './dto/create-lesson.dto';
 import { UpdateLessonDto } from './dto/update-lesson.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { GlobalException } from 'src/exceptions/global-exception';
+import { GlobalException } from 'src/exceptions/global.exception';
 
 @Injectable()
 export class LessonsService {
@@ -40,7 +40,10 @@ export class LessonsService {
       }
       return lesson;
     } catch (error) {
-        throw new GlobalException("Failed to get lesson", error.message)
+      if (error instanceof NotFoundException) {
+          throw error;
+        }
+      throw new GlobalException("Failed to get lesson", error.message)
      }
   }
 
