@@ -6,6 +6,10 @@ export class CreateLessonDto {
   readonly title: string;
 
   @IsOptional()
+  @IsString({ message: 'Overview must be a string' })
+  readonly overview?: string;
+
+  @IsOptional()
   @IsString({ message: 'Content must be a string' })
   readonly content?: string;
 }
