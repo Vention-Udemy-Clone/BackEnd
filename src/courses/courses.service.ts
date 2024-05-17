@@ -3,7 +3,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { courseMapper } from 'src/utils/courseMapper';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
-import { Course, CoursesResponse } from './entities/course.entity';
+import { CoursesResponse } from './entities/course.entity';
 
 @Injectable()
 export class CoursesService {
@@ -55,13 +55,25 @@ export class CoursesService {
     };
   }
 
-  async findOne(id: string): Promise<Course> {
+  async findOne(id: string) {
     const course = await this.prisma.course.findUnique({
       where: {
         id,
       },
       include: {
         author: true,
+        Module: {
+          select: {
+            id: true,
+            title: true,
+            Lesson: {
+              select: {
+                id: true,
+                title: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -75,7 +87,7 @@ export class CoursesService {
       );
     }
 
-    return courseMapper(course);
+    return { success: true, data: course };
   }
 
   async update(id: string, updateCourseDto: UpdateCourseDto) {
