@@ -10,9 +10,7 @@ async function bootstrap() {
     origin: 'http://localhost:5173',
     credentials: true,
   });
-
   app.useGlobalFilters(new GlobalExceptionFilter());
-
   app.setGlobalPrefix('api');
   await app.listen(3000);
 }
