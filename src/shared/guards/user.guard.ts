@@ -24,7 +24,7 @@ export class UserGuard implements CanActivate {
 
     const [bearer, token] = authHeader.split(' ');
 
-    if (bearer != 'Bearer' || !token)
+    if (bearer !== 'Bearer' || !token)
       throw new UnauthorizedException('UNAUTHORIZED');
 
     try {
