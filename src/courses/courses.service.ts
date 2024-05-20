@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Prisma, Status } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { courseMapper } from 'src/utils/courseMapper';
 import { CreateCourseDto } from './dto/create-course.dto';
@@ -88,6 +89,36 @@ export class CoursesService {
     }
 
     return { success: true, data: course };
+  }
+
+  async findByAuthorId(
+    authorId: string,
+    userId?: string,
+  ): Promise<CoursesResponse> {
+    const where: Prisma.CourseWhereInput =
+      userId === authorId
+        ? { authorId }
+        : { authorId, status: Status.PUBLISHED };
+
+    const [count, courses] = await this.prisma.$transaction([
+      this.prisma.course.count({
+        where,
+      }),
+
+      this.prisma.course.findMany({
+        where,
+        include: {
+          author: true,
+        },
+      }),
+    ]);
+
+    const courseData = courses.map((course) => courseMapper(course));
+
+    return {
+      count: count,
+      data: courseData,
+    };
   }
 
   async update(id: string, updateCourseDto: UpdateCourseDto) {
