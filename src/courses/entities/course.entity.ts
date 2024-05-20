@@ -14,6 +14,10 @@ export class Course {
   createdAt: Date;
   updatedAt: Date;
 }
+export class CourseResponse {
+  data: Course[];
+  count: number;
+}
 
 export class CoursesResponse {
   data: Course[];
