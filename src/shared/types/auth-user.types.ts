@@ -1,4 +1,4 @@
-export class Auth {
+export type AuthUser = {
   id: string;
   email: string;
-}
+};

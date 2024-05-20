@@ -4,6 +4,7 @@ import { courseMapper } from 'src/utils/courseMapper';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { Course, CoursesResponse } from './entities/course.entity';
+import { Prisma, Status } from '@prisma/client';
 
 @Injectable()
 export class CoursesService {
@@ -76,6 +77,36 @@ export class CoursesService {
     }
 
     return courseMapper(course);
+  }
+
+  async findByAuthorId(
+    authorId: string,
+    userId?: string,
+  ): Promise<CoursesResponse> {
+    const where: Prisma.CourseWhereInput =
+      userId === authorId
+        ? { authorId }
+        : { authorId, status: Status.PUBLISHED };
+
+    const [count, courses] = await this.prisma.$transaction([
+      this.prisma.course.count({
+        where,
+      }),
+
+      this.prisma.course.findMany({
+        where,
+        include: {
+          author: true,
+        },
+      }),
+    ]);
+
+    const courseData = courses.map((course) => courseMapper(course));
+
+    return {
+      count: count,
+      data: courseData,
+    };
   }
 
   async update(id: string, updateCourseDto: UpdateCourseDto) {
