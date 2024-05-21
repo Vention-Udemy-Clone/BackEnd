@@ -29,6 +29,11 @@ export class CoursesController {
     return this.coursesService.findAll();
   }
 
+  @Get('/my-courses/:authorId')
+  findMyCourses(@Param('authorId') authorId: string) {
+    return this.coursesService.findMyCourses(authorId);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.coursesService.findOne(id);

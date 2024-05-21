@@ -9,8 +9,9 @@ export const courseMapper = (course: Course) => {
     level: course.level,
     author: {
       id: course.author.id,
-      fullName: course.author.fullName,
       email: course.author.email,
+      fullName: course.author.fullName,
+      avatarUrl: course.author.avatarUrl,
     },
     createdAt: course.createdAt,
     updatedAt: course.updatedAt,

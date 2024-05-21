@@ -5,4 +5,3 @@ export class CreateModuleDto {
   @IsString()
   readonly title: string;
 }
-

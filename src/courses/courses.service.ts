@@ -20,13 +20,11 @@ export class CoursesService {
         status: createCourseDto.status,
       };
 
-      await this.prisma.course.create({
+      const { id } = await this.prisma.course.create({
         data: courseData,
       });
 
-      return {
-        message: 'Course created successfully',
-      };
+      return { success: true, data: { id } };
     } catch (error) {
       throw new HttpException(
         {
@@ -42,9 +40,11 @@ export class CoursesService {
     const [count, courses] = await this.prisma.$transaction([
       this.prisma.course.count(),
       this.prisma.course.findMany({
-        include: {
-          author: true,
+        // where: { status: 'PUBLISHED' },
+        orderBy: {
+          createdAt: 'desc',
         },
+        include: { author: true },
       }),
     ]);
 
@@ -58,9 +58,7 @@ export class CoursesService {
 
   async findOne(id: string) {
     const course = await this.prisma.course.findUnique({
-      where: {
-        id,
-      },
+      where: { id },
       include: {
         author: true,
         Module: {
@@ -121,6 +119,20 @@ export class CoursesService {
     };
   }
 
+  async findMyCourses(authorId: string): Promise<any> {
+    const [count, courses] = await this.prisma.$transaction([
+      this.prisma.course.count({ where: { authorId } }),
+      this.prisma.course.findMany({
+        where: { authorId },
+        include: { author: true },
+      }),
+    ]);
+
+    const courseData = courses.map((course) => courseMapper(course));
+
+    return { count, data: courseData };
+  }
+
   async update(id: string, updateCourseDto: UpdateCourseDto) {
     await this.findOne(id);
 
@@ -134,16 +146,11 @@ export class CoursesService {
 
     try {
       await this.prisma.course.update({
-        where: {
-          id,
-        },
+        where: { id },
         data: courseData,
       });
 
-      return {
-        id,
-        message: 'Course updated successfully',
-      };
+      return { success: true, data: { id } };
     } catch (error) {
       throw new HttpException(
         {
@@ -159,13 +166,9 @@ export class CoursesService {
     await this.findOne(id);
 
     await this.prisma.course.delete({
-      where: {
-        id,
-      },
+      where: { id },
     });
 
-    return {
-      message: 'Course deleted successfully',
-    };
+    return { message: 'Course deleted successfully' };
   }
 }
