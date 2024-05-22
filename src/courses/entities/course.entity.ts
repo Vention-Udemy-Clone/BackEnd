@@ -8,8 +8,9 @@ export class Course {
   level: Level;
   author: {
     id: string;
-    fullName: string;
     email: string;
+    fullName: string;
+    avatarUrl: string;
   };
   createdAt: Date;
   updatedAt: Date;

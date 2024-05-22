@@ -4,8 +4,9 @@ import { v4 as uuidv4 } from 'uuid';
 export const CoursesSeed: Course[] = [
   {
     id: uuidv4(),
-    title: 'Introduction to Programming',
-    description: 'Learn the basics of programming and get started with coding.',
+    title: 'JavaScript Essentials',
+    description:
+      'Master the fundamentals of JavaScript and start building interactive web applications.',
     authorId: '1',
     level: 'BEGINNER' as Level,
     status: 'PUBLISHED' as Status,
@@ -14,42 +15,9 @@ export const CoursesSeed: Course[] = [
   },
   {
     id: uuidv4(),
-    title: 'Web Development Fundamentals',
+    title: 'Advanced JavaScript Techniques',
     description:
-      'Explore the essentials of web development and build interactive websites.',
-    authorId: '1',
-    level: 'BEGINNER' as Level,
-    status: 'PUBLISHED' as Status,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: uuidv4(),
-    title: 'Database Management Systems',
-    description:
-      'Discover the principles of database management and learn SQL.',
-    authorId: '1',
-    level: 'INTERMEDIATE' as Level,
-    status: 'PUBLISHED' as Status,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: uuidv4(),
-    title: 'Object-Oriented Programming',
-    description:
-      'Master the concepts of object-oriented programming and design patterns.',
-    authorId: '1',
-    level: 'INTERMEDIATE' as Level,
-    status: 'PUBLISHED' as Status,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: uuidv4(),
-    title: 'Network Security',
-    description:
-      'Learn about network security protocols and techniques to protect data.',
+      'Dive deep into advanced concepts of JavaScript to enhance your development skills.',
     authorId: '1',
     level: 'ADVANCED' as Level,
     status: 'PUBLISHED' as Status,
@@ -58,20 +26,20 @@ export const CoursesSeed: Course[] = [
   },
   {
     id: uuidv4(),
-    title: 'Data Structures and Algorithms',
+    title: 'Full-Stack Web Development',
     description:
-      'Explore fundamental data structures and algorithms for efficient problem-solving.',
+      'Become a proficient full-stack developer by learning both front-end and back-end technologies.',
     authorId: '1',
-    level: 'ADVANCED' as Level,
-    status: 'PUBLISHED' as Status,
+    level: 'INTERMEDIATE' as Level,
+    status: 'DRAFT' as Status,
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
     id: uuidv4(),
-    title: 'Mobile App Development',
+    title: 'Node.js and Express.js',
     description:
-      'Build mobile applications for iOS and Android using popular frameworks.',
+      'Learn how to build robust and scalable server-side applications using Node.js and Express.js.',
     authorId: '1',
     level: 'INTERMEDIATE' as Level,
     status: 'PUBLISHED' as Status,
@@ -80,33 +48,12 @@ export const CoursesSeed: Course[] = [
   },
   {
     id: uuidv4(),
-    title: 'Cloud Computing Basics',
+    title: 'React for Beginners',
     description:
-      'Get an introduction to cloud computing and learn about popular cloud platforms.',
+      'Get started with React and learn how to build dynamic user interfaces for web applications.',
     authorId: '1',
     level: 'BEGINNER' as Level,
-    status: 'PUBLISHED' as Status,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: uuidv4(),
-    title: 'Artificial Intelligence Fundamentals',
-    description:
-      'Discover the basics of artificial intelligence and machine learning.',
-    authorId: '1',
-    level: 'BEGINNER' as Level,
-    status: 'PUBLISHED' as Status,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: uuidv4(),
-    title: 'Cybersecurity Essentials',
-    description: 'Learn essential cybersecurity concepts and best practices.',
-    authorId: '1',
-    level: 'BEGINNER' as Level,
-    status: 'PUBLISHED' as Status,
+    status: 'DRAFT' as Status,
     createdAt: new Date(),
     updatedAt: new Date(),
   },

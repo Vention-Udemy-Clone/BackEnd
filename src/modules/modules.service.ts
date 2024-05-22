@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { GlobalException } from 'src/exceptions/global.exception';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateModuleDto } from './dto/create-module.dto';
 import { UpdateModuleDto } from './dto/update-module.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { GlobalException } from 'src/exceptions/global.exception';
 import { Module } from './entities/module.entity';
 
 @Injectable()
@@ -12,22 +12,22 @@ export class ModulesService {
   async createModule(courseId: string, createModuleDto: CreateModuleDto) {
     try {
       const { title } = createModuleDto;
-    const course = await this.prisma.course.findUnique({
-      where: { id: courseId },
-      include: { Module: true },
-    });
-    if (!course) {
-      throw new NotFoundException(`Course with id ${courseId} not found`);
-    }
-    const module = await this.prisma.module.create({
-      data: {
-        title,
-        course: { connect: { id: courseId } },
-      },
-    });
-    return module;
+      const course = await this.prisma.course.findUnique({
+        where: { id: courseId },
+        include: { Module: true },
+      });
+      if (!course) {
+        throw new NotFoundException(`Course with id ${courseId} not found`);
+      }
+      const module = await this.prisma.module.create({
+        data: {
+          title,
+          course: { connect: { id: courseId } },
+        },
+      });
+      return module;
     } catch (error) {
-      throw new GlobalException("Failed to create module", error.message);
+      throw new GlobalException('Failed to create module', error.message);
     }
   }
 
@@ -45,7 +45,7 @@ export class ModulesService {
       if (error instanceof NotFoundException) {
         throw error;
       }
-      throw new GlobalException("Failed to get module", error.message);
+      throw new GlobalException('Failed to get module', error.message);
     }
   }
 
@@ -59,19 +59,27 @@ export class ModulesService {
       });
       return updatedModule;
     } catch (error) {
-      throw new GlobalException("Failed to update module", error.message);
+      throw new GlobalException('Failed to update module', error.message);
     }
   }
 
   async deleteModule(id: string) {
     await this.getModuleById(id);
     try {
+      const lessonsInModule = await this.prisma.lesson.findMany({
+        where: { moduleId: id },
+      });
+
+      lessonsInModule.forEach(async (lesson) => {
+        await this.prisma.lesson.delete({ where: { id: lesson.id } });
+      });
+
       const deletedModule = await this.prisma.module.delete({
         where: { id },
       });
       return deletedModule;
     } catch (error) {
-      throw new GlobalException("Failed to delete module", error.message);
+      throw new GlobalException('Failed to delete module', error.message);
     }
   }
 }
