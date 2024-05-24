@@ -11,7 +11,7 @@ export class QuizService {
 
   async generateQuizQuestions(lessonId: string) {
     const lesson = await this.lessonsService.getLessonById(lessonId);
-    const prompt = `Generate a quiz with 5 open-ended questions of intermediate difficulty levels based on ${lesson.content}. Return a list of questions formatted exactly like this: {question: question answer: answer}---{question: question answer: answer}.`;
+    const prompt = `Generate a quiz with 5 open-ended questions of intermediate difficulty levels based on ${lesson.content}. Return a list of questions formatted exactly like this: {question: question answer: answer}---{question: question answer: answer}. Do not use line breaks or any other formatting except provided in this prompt.`;
     let response;
     try {
       response = await this.geminiService.generateContent(prompt);
@@ -25,8 +25,8 @@ export class QuizService {
     const quizObject = quizResponse.map(item => {
       const properties = item.split('answer:');
       return {
-        question: properties[0].replace('{', '').replace('question:', '').trim(),
-        answer: properties[1].replace('}', '').trim()
+        question: properties[0]?.replace('{', '').replace('question:', '').trim(),
+        answer: properties[1]?.replace('}', '').trim()
       };
     });
     return quizObject;
