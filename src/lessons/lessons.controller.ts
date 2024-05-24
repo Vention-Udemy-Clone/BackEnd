@@ -8,12 +8,18 @@ import {
   Post,
 } from '@nestjs/common';
 import { CreateLessonDto } from './dto/create-lesson.dto';
+import { generateLessonDto } from './dto/generate.dto';
 import { UpdateLessonDto } from './dto/update-lesson.dto';
 import { LessonsService } from './lessons.service';
 
 @Controller('lessons')
 export class LessonsController {
   constructor(private readonly lessonsService: LessonsService) {}
+
+  @Post('generate-texts')
+  async generate(@Body() body: generateLessonDto) {
+    return await this.lessonsService.generateForLesson(body);
+  }
 
   @Post(':moduleId')
   async createLesson(
