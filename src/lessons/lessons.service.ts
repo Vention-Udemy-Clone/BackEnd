@@ -1,13 +1,19 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Lesson } from '@prisma/client';
 import { GlobalException } from 'src/exceptions/global.exception';
+import { GeminiService } from 'src/gemini/gemini.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { LessonContext } from 'src/shared/types/auth-user.types';
 import { CreateLessonDto } from './dto/create-lesson.dto';
+import { generateLessonDto } from './dto/generate.dto';
 import { UpdateLessonDto } from './dto/update-lesson.dto';
 
 @Injectable()
 export class LessonsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private readonly gemini: GeminiService,
+  ) {}
 
   async createLesson(moduleId: string, createLessonDto: CreateLessonDto) {
     try {
@@ -76,6 +82,28 @@ export class LessonsService {
       return deletedLesson;
     } catch (error) {
       throw new GlobalException('Failed to delete lesson', error.message);
+    }
+  }
+
+  async generateForLesson(body: generateLessonDto) {
+    try {
+      const prompt = `You are experienced contend maker.
+      Your goal to generate a lesson ${body.context.toString().toLocaleLowerCase()} for a lesson titled "${body.title}".
+      ${body.context === LessonContext.OVERVIEW ? 'The overview should be designed to help students learn the basics of the topic and build a strong foundation.' : 'The content should shortly cover the topic and provide a brief explanation.'}
+      Provide response as plain text, no any styling required. Do not use Markdown or HTML. Do not use '**' or '__' for bold or italic.
+      No Heading or Title required.
+      As it is plain text, for styling use symbols like '*', '-' and other. But do not use Markdown styling format.
+      The ${body.context.toString().toLocaleLowerCase()} should be around ${body.words} words.`;
+
+      const data = await this.gemini.generateContent(prompt);
+      return {
+        success: true,
+        data: {
+          text: data.response.candidates[0].content.parts[0].text,
+        },
+      };
+    } catch (error) {
+      throw new GlobalException('Error generating course description', error);
     }
   }
 }
