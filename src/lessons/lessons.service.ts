@@ -1,13 +1,19 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Lesson } from '@prisma/client';
 import { GlobalException } from 'src/exceptions/global.exception';
+import { GeminiService } from 'src/gemini/gemini.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateLessonDto } from './dto/create-lesson.dto';
 import { UpdateLessonDto } from './dto/update-lesson.dto';
+import { formatChatHistory } from 'src/utils/formatChatHistory';
 
 @Injectable()
 export class LessonsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private readonly gemini: GeminiService,
+  ) {}
+  private lessonId: string | null = null;
 
   async createLesson(moduleId: string, createLessonDto: CreateLessonDto) {
     try {
@@ -76,6 +82,40 @@ export class LessonsService {
       return deletedLesson;
     } catch (error) {
       throw new GlobalException('Failed to delete lesson', error.message);
+    }
+  }
+
+  async lessonChat(lessonId: string, question: string) {
+    let prompt: string | string[];
+    const isNewLesson = this.lessonId !== lessonId;
+
+    if (isNewLesson) {
+      this.lessonId = lessonId;
+
+      const lesson = await this.getLessonById(lessonId);
+
+      const configPrompt = `Below i will provide you title, overview and content of the lesson /n.
+      You need to answer the questions based on the content of the lesson. /n
+      Before answering for each of the question, check whether the context of the question is closely related to the lesson or not.
+      If not don't answer the question.  /n
+      Exception: Greetings. /n
+      Each answer should be in text format and not more than 200 words. /n 
+      Title: ${lesson.title} /n
+      Overview: ${lesson.overview} /n
+      Content: ${lesson.content}`;
+
+      prompt = [configPrompt, question];
+    } else {
+      prompt = question;
+    }
+
+    try {
+      const result = await this.gemini.lessonChat(prompt, isNewLesson);
+      const history = formatChatHistory(result);
+
+      return { success: true, history };
+    } catch (error) {
+      throw new GlobalException('Failed to get chat', error.message);
     }
   }
 }

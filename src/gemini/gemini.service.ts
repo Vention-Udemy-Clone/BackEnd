@@ -1,11 +1,11 @@
-import { GenerateContentResult } from '@google/generative-ai';
+import { ChatSession, GenerateContentResult } from '@google/generative-ai';
 import { Injectable } from '@nestjs/common';
-import { LessonsService } from 'src/lessons/lessons.service';
-import { geminiAI } from 'src/utils/gemini';
+import { geminiAI, startChat } from 'src/utils/gemini';
 
 @Injectable()
 export class GeminiService {
-  constructor(private lessonsService: LessonsService) {}
+  constructor() {}
+  private geminiChat: ChatSession | null = null;
 
   async generateContent(prompt: string): Promise<GenerateContentResult> {
     const content = await geminiAI(prompt);
@@ -13,14 +13,12 @@ export class GeminiService {
     return content;
   }
 
-  async lessonChat(
-    prompt: string,
-    lessonId: string,
-  ): Promise<GenerateContentResult> {
-    const lesson = await this.lessonsService.getLessonById(lessonId);
-    console.log(lesson);
-    const content = await geminiAI(prompt);
+  async lessonChat(prompt: string | string[], isNewLesson: boolean) {
+    if (!this.geminiChat || isNewLesson) this.geminiChat = startChat();
 
-    return content;
+    await this.geminiChat.sendMessage(prompt);
+    const result = await this.geminiChat.getHistory();
+
+    return result;
   }
 }
