@@ -6,6 +6,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateLessonDto } from './dto/create-lesson.dto';
 import { UpdateLessonDto } from './dto/update-lesson.dto';
 import { formatChatHistory } from 'src/utils/formatChatHistory';
+import { configPrompt } from 'src/shared/promts/lesson-chat';
 
 @Injectable()
 export class LessonsService {
@@ -94,17 +95,13 @@ export class LessonsService {
 
       const lesson = await this.getLessonById(lessonId);
 
-      const configPrompt = `Below i will provide you title, overview and content of the lesson /n.
-      You need to answer the questions based on the content of the lesson. /n
-      Before answering for each of the question, check whether the context of the question is closely related to the lesson or not.
-      If not don't answer the question.  /n
-      Exception: Greetings. /n
-      Each answer should be in text format and not more than 200 words. /n 
-      Title: ${lesson.title} /n
-      Overview: ${lesson.overview} /n
-      Content: ${lesson.content}`;
+      const config = configPrompt(
+        lesson.title,
+        lesson.overview,
+        lesson.content,
+      );
 
-      prompt = [configPrompt, question];
+      prompt = [config, question];
     } else {
       prompt = question;
     }
