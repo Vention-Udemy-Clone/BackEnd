@@ -8,11 +8,12 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { CoursesService } from './courses.service';
-import { CreateCourseDto } from './dto/create-course.dto';
-import { UpdateCourseDto } from './dto/update-course.dto';
 import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
 import { UserGuard } from 'src/shared/guards/user.guard';
+import { CoursesService } from './courses.service';
+import { CreateCourseDto } from './dto/create-course.dto';
+import { generateDescDto } from './dto/generate-desc.dto';
+import { UpdateCourseDto } from './dto/update-course.dto';
 
 @Controller('courses')
 export class CoursesController {
@@ -57,5 +58,10 @@ export class CoursesController {
   @UseGuards(UserGuard)
   remove(@Param('id') id: string) {
     return this.coursesService.remove(id);
+  }
+
+  @Post('generate-description')
+  async generateDesc(@Body() body: generateDescDto) {
+    return await this.coursesService.generateDesc(body);
   }
 }

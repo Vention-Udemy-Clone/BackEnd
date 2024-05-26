@@ -1,5 +1,6 @@
 import { ChatSession, GenerateContentResult } from '@google/generative-ai';
 import { Injectable } from '@nestjs/common';
+import { GlobalException } from 'src/exceptions/global.exception';
 import { geminiAI, startChat } from 'src/utils/gemini';
 
 @Injectable()
@@ -8,17 +9,25 @@ export class GeminiService {
   private geminiChat: ChatSession | null = null;
 
   async generateContent(prompt: string): Promise<GenerateContentResult> {
-    const content = await geminiAI(prompt);
+    try {
+      const content = await geminiAI(prompt);
 
-    return content;
+      return content;
+    } catch (error) {
+      throw new GlobalException('Error generating content', error);
+    }
   }
 
   async lessonChat(prompt: string | string[], isNewLesson: boolean) {
-    if (!this.geminiChat || isNewLesson) this.geminiChat = startChat();
+    try {
+      if (!this.geminiChat || isNewLesson) this.geminiChat = startChat();
 
-    await this.geminiChat.sendMessage(prompt);
-    const result = await this.geminiChat.getHistory();
+      await this.geminiChat.sendMessage(prompt);
+      const result = await this.geminiChat.getHistory();
 
-    return result;
+      return result;
+    } catch (error) {
+      throw new GlobalException('Error creating chat', error);
+    }
   }
 }

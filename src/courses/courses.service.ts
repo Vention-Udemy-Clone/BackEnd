@@ -1,14 +1,20 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma, Status } from '@prisma/client';
+import { GlobalException } from 'src/exceptions/global.exception';
+import { GeminiService } from 'src/gemini/gemini.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { courseMapper } from 'src/utils/courseMapper';
 import { CreateCourseDto } from './dto/create-course.dto';
+import { generateDescDto } from './dto/generate-desc.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { CoursesResponse } from './entities/course.entity';
 
 @Injectable()
 export class CoursesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly gemini: GeminiService,
+  ) {}
 
   async create(createCourseDto: CreateCourseDto) {
     try {
@@ -170,5 +176,26 @@ export class CoursesService {
     });
 
     return { message: 'Course deleted successfully' };
+  }
+
+  async generateDesc(body: generateDescDto) {
+    try {
+      const prompt = `You are experienced contend maker.
+      Your goal to generate a course description for a course titled "${body.title}" for the ${body.level} level.
+      The course should be designed to help students learn the basics of the topic and build a strong foundation.
+      Do not use any words like 'course description', 'course title', 'course level'.
+      As it is plain text, for styling use symbols like '*', '-' and other.
+      The description should be around ${body.words} words.`;
+      const data = await this.gemini.generateContent(prompt);
+
+      return {
+        success: true,
+        data: {
+          description: data.response.candidates[0].content.parts[0].text,
+        },
+      };
+    } catch (error) {
+      throw new GlobalException('Error generating course description', error);
+    }
   }
 }
