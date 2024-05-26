@@ -7,6 +7,8 @@ import { LessonContext } from 'src/shared/types/auth-user.types';
 import { CreateLessonDto } from './dto/create-lesson.dto';
 import { generateLessonDto } from './dto/generate.dto';
 import { UpdateLessonDto } from './dto/update-lesson.dto';
+import { formatChatHistory } from 'src/utils/formatChatHistory';
+import { configPrompt } from 'src/shared/promts/lesson-chat';
 
 @Injectable()
 export class LessonsService {
@@ -14,6 +16,7 @@ export class LessonsService {
     private prisma: PrismaService,
     private readonly gemini: GeminiService,
   ) {}
+  private lessonId: string | null = null;
 
   async createLesson(moduleId: string, createLessonDto: CreateLessonDto) {
     try {
@@ -104,6 +107,36 @@ export class LessonsService {
       };
     } catch (error) {
       throw new GlobalException('Error generating course description', error);
+    }
+  }
+
+  async lessonChat(lessonId: string, question: string) {
+    let prompt: string | string[];
+    const isNewLesson = this.lessonId !== lessonId;
+
+    if (isNewLesson) {
+      this.lessonId = lessonId;
+
+      const lesson = await this.getLessonById(lessonId);
+
+      const config = configPrompt(
+        lesson.title,
+        lesson.overview,
+        lesson.content,
+      );
+
+      prompt = [config, question];
+    } else {
+      prompt = question;
+    }
+
+    try {
+      const result = await this.gemini.lessonChat(prompt, isNewLesson);
+      const history = formatChatHistory(result);
+
+      return { success: true, history };
+    } catch (error) {
+      throw new GlobalException('Failed to get chat', error.message);
     }
   }
 }

@@ -11,6 +11,7 @@ import { CreateLessonDto } from './dto/create-lesson.dto';
 import { generateLessonDto } from './dto/generate.dto';
 import { UpdateLessonDto } from './dto/update-lesson.dto';
 import { LessonsService } from './lessons.service';
+import { LessonChatDto } from './dto/lesson-chat.dto';
 
 @Controller('lessons')
 export class LessonsController {
@@ -55,5 +56,13 @@ export class LessonsController {
   async deleteLesson(@Param('id') id: string) {
     const deletedModule = await this.lessonsService.deleteLesson(id);
     return { success: true, data: deletedModule };
+  }
+
+  @Post(':id/chat')
+  async lessonChat(
+    @Param('id') id: string,
+    @Body() lessonChatDto: LessonChatDto,
+  ) {
+    return await this.lessonsService.lessonChat(id, lessonChatDto.question);
   }
 }
