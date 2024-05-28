@@ -7,3 +7,7 @@ export function colorLog(message, color) {
   };
   console.log(`${codes[color]}%s\x1b[0m`, message);
 }
+
+export const removeCommas = (str: string) => {
+  return str.replace(/,\s*([\]}])/g, '$1');
+};

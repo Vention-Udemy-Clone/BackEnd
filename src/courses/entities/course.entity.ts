@@ -24,3 +24,14 @@ export class CoursesResponse {
   data: Course[];
   count: number;
 }
+
+export class GeneratedCourseResponse {
+  title: string;
+  description: string;
+  modules: {
+    title: string;
+    lessons: {
+      title: string;
+    }[];
+  }[];
+}

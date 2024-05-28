@@ -18,15 +18,19 @@ export class QuizService {
     } catch (error) {
       throw new Error('Error generating content with AI');
     }
-    const quizResponse = response.response.candidates[0].content.parts[0].text.split('---');
+    const quizResponse =
+      response.response.candidates[0].content.parts[0].text.split('---');
     if (!quizResponse) {
       throw new Error('Error generating quiz questions');
-    };
-    const quizObject = quizResponse.map(item => {
+    }
+    const quizObject = quizResponse.map((item) => {
       const properties = item.split('answer:');
       return {
-        question: properties[0]?.replace('{', '').replace('question:', '').trim(),
-        answer: properties[1]?.replace('}', '').trim()
+        question: properties[0]
+          ?.replace('{', '')
+          .replace('question:', '')
+          .trim(),
+        answer: properties[1]?.replace('}', '').trim(),
       };
     });
     return quizObject;
