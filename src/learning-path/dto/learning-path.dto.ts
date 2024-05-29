@@ -7,7 +7,7 @@ export class LearningPathDto {
   @IsEnum(Stack)
   stack: Stack;
 
-  @IsNotEmpty({ message: 'Stack is required' })
+  @IsNotEmpty({ message: 'Level is required' })
   @IsEnum(Level)
   level: Level;
 }

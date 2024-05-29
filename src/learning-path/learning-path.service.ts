@@ -36,7 +36,6 @@ export class LearningPathService {
       if (!learningPathResponse) {
         throw new InternalServerErrorException('Error generating learning path.');
       }
-      console.log(learningPathResponse)
       const dataString = learningPathResponse.replace(/json/i, '').replace('```', '').trim();
       
       try {
