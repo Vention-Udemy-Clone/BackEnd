@@ -1,13 +1,17 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Prisma, Status } from '@prisma/client';
+import { Level, Prisma, Status } from '@prisma/client';
 import { GlobalException } from 'src/exceptions/global.exception';
 import { GeminiService } from 'src/gemini/gemini.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { removeCommas } from 'src/utils';
 import { courseMapper } from 'src/utils/courseMapper';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { generateDescDto } from './dto/generate-desc.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
-import { CoursesResponse } from './entities/course.entity';
+import {
+  CoursesResponse,
+  GeneratedCourseResponse,
+} from './entities/course.entity';
 
 @Injectable()
 export class CoursesService {
@@ -191,11 +195,95 @@ export class CoursesService {
       return {
         success: true,
         data: {
-          description: data.response.candidates[0].content.parts[0].text,
+          description: data.response.text(),
         },
       };
     } catch (error) {
       throw new GlobalException('Error generating course description', error);
+    }
+  }
+
+  async generateCourse(body: any) {
+    try {
+      const prompt = `
+      You are professional content maker. You are tasked with creating a text based content for course.
+      Your goal is to generate a course which includes modules and each module should have a title and several lessons with title and content also course description based on the title.
+      Description should be around 100-200 words.
+      Example:
+      Course Title: Mastering Git
+      Module 1: Introduction to Git
+      Lesson 1: What is Git?
+      Lesson 2: Why Git?
+      ...
+      Module 2: Git Basics
+      ...
+      Your task is to generate a course with several(in range of 5-10) modules and each module should have several(in range of 1-5) lessons(it doesn't have to exactly same in each module). No need to write the content of the lessons, just the titles.
+
+      Module titles shouldn't be 'Projects and Case Studies' or similar. It should be more specific like 'Introduction to Git' or 'Git Basics'. Also they can't be 'External Resources' or 'Additional Resources'.
+
+      Output should be raw JSON format.
+      The course should be about "${body.title}".
+
+      Here is the sample output: DON'T add code block
+      {
+        "title": "${body.title}",
+        "description": "Description of the course.",
+        "modules": [
+          {
+            "title": "Module title",
+            "lessons": [
+              {"title": "Lesson title"},
+              {"title": "Lesson title"}
+            ]
+          },
+        ] 
+      }
+      `;
+      const content = await this.gemini.generateContent(prompt);
+      const text = content.response.text();
+
+      const courseJSON: GeneratedCourseResponse = await JSON.parse(
+        removeCommas(text),
+      );
+
+      const course = await this.prisma.course.create({
+        data: {
+          title: courseJSON.title,
+          description: courseJSON.description,
+          authorId: body.authorId,
+          status: Status.DRAFT,
+          level: Level.BEGINNER,
+          Module: {
+            create: courseJSON.modules.map((module) => ({
+              title: module.title,
+              Lesson: {
+                create: module.lessons.map((lesson) => ({
+                  title: lesson.title,
+                })),
+              },
+            })),
+          },
+        },
+        include: {
+          author: true,
+          Module: {
+            select: {
+              id: true,
+              title: true,
+              Lesson: {
+                select: {
+                  id: true,
+                  title: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return { success: true, data: course };
+    } catch (error) {
+      throw new GlobalException('Error generating course', error);
     }
   }
 }

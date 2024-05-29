@@ -3,12 +3,12 @@ import { Lesson } from '@prisma/client';
 import { GlobalException } from 'src/exceptions/global.exception';
 import { GeminiService } from 'src/gemini/gemini.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { configPrompt } from 'src/shared/promts/lesson-chat';
 import { LessonContext } from 'src/shared/types/auth-user.types';
+import { formatChatHistory } from 'src/utils/formatChatHistory';
 import { CreateLessonDto } from './dto/create-lesson.dto';
 import { generateLessonDto } from './dto/generate.dto';
 import { UpdateLessonDto } from './dto/update-lesson.dto';
-import { formatChatHistory } from 'src/utils/formatChatHistory';
-import { configPrompt } from 'src/shared/promts/lesson-chat';
 
 @Injectable()
 export class LessonsService {
@@ -93,10 +93,16 @@ export class LessonsService {
       const prompt = `You are experienced contend maker.
       Your goal to generate a lesson ${body.context.toString().toLocaleLowerCase()} for a lesson titled "${body.title}".
       ${body.context === LessonContext.OVERVIEW ? 'The overview should be designed to help students learn the basics of the topic and build a strong foundation.' : 'The content should shortly cover the topic and provide a brief explanation.'}
-      Provide response as plain text, no any styling required. Do not use Markdown or HTML. Do not use '**' or '__' for bold or italic.
-      No Heading or Title required.
-      As it is plain text, for styling use symbols like '*', '-' and other. But do not use Markdown styling format.
-      The ${body.context.toString().toLocaleLowerCase()} should be around ${body.words} words.`;
+    
+      Format shout be HTML. Use <h1> for the title and <p> for the content, use <strong>, <em> tags. If nesesary use <ul> and <li> for the list.
+
+      Add line spacing between using <br> tag, but not more than 2 times in a row.
+
+      The words counts cannot be less than 50 words.
+
+      The content length should be around ${body.words} words.
+      
+      `;
 
       const data = await this.gemini.generateContent(prompt);
       return {
