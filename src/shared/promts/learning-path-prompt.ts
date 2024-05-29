@@ -64,7 +64,7 @@ export const learningPathPrompt = (
       - Provide at least seven detailed recommendations.
 
   4. Output Format:
-      - Ensure output is in valid raw JSON format.
+      - Ensure output is in format exactly as it is in example output.
       - Use only double quotes (").
       - No line breaks or additional formatting.
   `;
