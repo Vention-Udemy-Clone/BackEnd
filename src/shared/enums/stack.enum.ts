@@ -1,0 +1,9 @@
+export enum Stack {
+  FRONTEND = 'FRONTEND',
+  BACKEND = 'BACKEND',
+  FULLSTACK = 'FULLSTACK',
+  DEVOPS = 'DEVOPS',
+  TESTING = 'TESTING',
+  MOBILE = 'MOBILE',
+  DESIGN = 'DESIGN',
+}
