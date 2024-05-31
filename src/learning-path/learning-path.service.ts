@@ -1,8 +1,12 @@
-import { Injectable, InternalServerErrorException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  BadRequestException,
+} from '@nestjs/common';
 import { GeminiService } from '../gemini/gemini.service';
 import { PrismaService } from '../prisma/prisma.service';
-import { learningPathPrompt } from '../shared/promts/learning-path-prompt';
-import { Stack } from 'src/shared/enums/stack.enum';
+import { learningPathPrompt } from '../shared/prompts/learning-path.prompt';
+// import { Stack } from 'src/shared/enums/stack.enum';
 import { Level } from '@prisma/client';
 import { LearningPathResult } from './entities/learning-path.entity';
 
@@ -13,7 +17,10 @@ export class LearningPathService {
     private readonly prismaService: PrismaService,
   ) {}
 
-  async generateLearningPath(stack: Stack, studentLevel: Level): Promise<LearningPathResult> {
+  async generateLearningPath(
+    stack: string,
+    studentLevel: Level,
+  ): Promise<LearningPathResult> {
     try {
       const coursesList = await this.prismaService.course.findMany({
         select: {
@@ -30,23 +37,31 @@ export class LearningPathService {
 
       const prompt = learningPathPrompt(studentLevel, stack, coursesList);
 
-      const content = await this.geminiService.generateContent(prompt);
+      const content = await this.geminiService.generateProContent(prompt);
       const learningPathResponse = content.response.text();
 
       if (!learningPathResponse) {
-        throw new InternalServerErrorException('Error generating learning path.');
+        throw new InternalServerErrorException(
+          'Error generating learning path.',
+        );
       }
-      const dataString = learningPathResponse.replace(/json/i, '').replace('```', '').trim();
-      
+      const dataString = learningPathResponse
+        .replace(/json/i, '')
+        .replace('```', '')
+        .trim();
+
       try {
         const learningPathJson: LearningPathResult = JSON.parse(dataString);
         return learningPathJson;
       } catch (error) {
-        throw new BadRequestException(`Error parsing learning path data: ${error.message}`);
+        throw new BadRequestException(
+          `Error parsing learning path data: ${error.message}`,
+        );
       }
-
     } catch (error) {
-      throw new InternalServerErrorException(`Error generating learning path: ${error.message}`);
+      throw new InternalServerErrorException(
+        `Error generating learning path: ${error.message}`,
+      );
     }
   }
 }
