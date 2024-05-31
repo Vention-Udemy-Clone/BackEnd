@@ -3,7 +3,7 @@ import { Lesson } from '@prisma/client';
 import { GlobalException } from 'src/exceptions/global.exception';
 import { GeminiService } from 'src/gemini/gemini.service';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { configPrompt } from 'src/shared/promts/lesson-chat';
+import { configPrompt } from 'src/shared/prompts/lesson-chat.prompt';
 import { LessonContext } from 'src/shared/types/auth-user.types';
 import { formatChatHistory } from 'src/utils/formatChatHistory';
 import { CreateLessonDto } from './dto/create-lesson.dto';

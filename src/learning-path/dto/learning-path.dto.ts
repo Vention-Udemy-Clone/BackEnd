@@ -1,11 +1,10 @@
 import { Level } from '@prisma/client';
-import { IsEnum, IsNotEmpty } from 'class-validator';
-import { Stack } from 'src/shared/enums/stack.enum';
+import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
 
 export class LearningPathDto {
   @IsNotEmpty({ message: 'Stack is required' })
-  @IsEnum(Stack)
-  stack: Stack;
+  @IsString()
+  stack: string;
 
   @IsNotEmpty({ message: 'Level is required' })
   @IsEnum(Level)
