@@ -8,6 +8,6 @@ export class QuizController {
   @Get(':lessonId')
   async generateQuizQuestions(@Param('lessonId') lessonId: string) {
     const quizData = await this.quizService.generateQuizQuestions(lessonId);
-    return {success: true, data: quizData};
+    return { success: true, data: quizData };
   }
 }
