@@ -32,15 +32,17 @@ enum Level {
 }
 
 model User {
-  id           String         @id @default(cuid())
-  email        String         @unique
-  role         Role           @default(USER)
-  fullName     String
-  avatarUrl    String?
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  Course       Course[]
-  UserOnCourse UserOnCourse[]
+  id            String          @id @default(cuid())
+  email         String          @unique
+  role          Role            @default(USER)
+  fullName      String
+  avatarUrl     String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  Course        Course[]
+  UserOnCourse  UserOnCourse[]
+  Note          Note[]
+  LessonSummary LessonSummary[]
 }
 
 model UserOnCourse {
@@ -79,14 +81,16 @@ model Module {
 }
 
 model Lesson {
-  id        String   @id @default(cuid())
-  title     String
-  overview  String?
-  content   String?
-  moduleId  String
-  module    Module   @relation(fields: [moduleId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String          @id @default(cuid())
+  title         String
+  overview      String?
+  content       String?
+  moduleId      String
+  module        Module          @relation(fields: [moduleId], references: [id])
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  Note          Note[]
+  LessonSummary LessonSummary[]
 }
 
 model Tag {
@@ -105,4 +109,29 @@ model TagOnCourse {
   tag       Tag      @relation(fields: [tagId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Note {
+  id           String   @id @default(cuid())
+  note         String
+  originalText String
+  from         String
+  to           String
+  userId       String
+  lessonId     String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id])
+  lesson       Lesson   @relation(fields: [lessonId], references: [id])
+}
+
+model LessonSummary {
+  id        String   @id @default(cuid())
+  lessonId  String
+  userId    String
+  summary   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+  lesson    Lesson   @relation(fields: [lessonId], references: [id])
 }
