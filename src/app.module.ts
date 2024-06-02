@@ -11,6 +11,7 @@ import { NotesModule } from './notes/notes.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { QuizModule } from './quiz/quiz.module';
 import { UserModule } from './user/user.module';
+import { SummaryModule } from './summary/summary.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { UserModule } from './user/user.module';
     QuizModule,
     NotesModule,
     LearningPathModule,
+    SummaryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
