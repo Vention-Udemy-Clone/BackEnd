@@ -23,7 +23,7 @@ export const learningPathPrompt = (
   2. Recommendations:
       - Suggest additional resources to advance the student's career in the chosen stack.
       - Include portfolio development, online communities, networking, and soft skills improvement.
-      - Provide at least seven detailed recommendations.
+      - Provide at least five detailed recommendations.
 
   3. Output Format:
       - Ensure output is in format exactly as it is in example output.
