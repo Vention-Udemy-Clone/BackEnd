@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Post } from '@nestjs/common';
 import { LearningPathService } from './learning-path.service';
 import { Body } from '@nestjs/common';
 import { LearningPathDto } from './dto/learning-path.dto';
@@ -7,7 +7,7 @@ import { LearningPathDto } from './dto/learning-path.dto';
 export class LearningPathController {
   constructor(private readonly learningPathService: LearningPathService) {}
 
-  @Get()
+  @Post()
   async generateLearningPath(@Body() learningPathDto: LearningPathDto) {
     const learningPath = await this.learningPathService.generateLearningPath(
       learningPathDto.stack,
