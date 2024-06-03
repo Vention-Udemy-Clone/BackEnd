@@ -6,9 +6,9 @@ import {
 import { GeminiService } from '../gemini/gemini.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { learningPathPrompt } from '../shared/prompts/learning-path.prompt';
-// import { Stack } from 'src/shared/enums/stack.enum';
 import { Level } from '@prisma/client';
 import { LearningPathResult } from './entities/learning-path.entity';
+import { levelMapper } from 'src/utils/levelMapper';
 
 @Injectable()
 export class LearningPathService {
@@ -28,6 +28,9 @@ export class LearningPathService {
           description: true,
           level: true,
           id: true,
+        },
+        where: {
+          OR: levelMapper[studentLevel],
         },
       });
 

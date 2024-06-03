@@ -1,5 +1,4 @@
 import { Level } from '@prisma/client';
-// import { Stack } from '../enums/stack.enum';
 import { CourseListForPath } from 'src/learning-path/entities/learning-path.entity';
 
 export const learningPathPrompt = (
@@ -37,25 +36,7 @@ export const learningPathPrompt = (
     "allCourses": ${JSON.stringify(coursesList)}
   }
 
-  If provided stack is not related to IT, return:
-  ***EXAMPLE START***
-  OUTPUT FORMAT - raw JSON format:
-  {
-    "selectedCourses": [],
-    "recommendations": [],
-    "courseFound": "..."
-    
-  }
-
-  EXAMPLE OUTPUT:
-  {
-    "selectedCourses": [],
-    "recommendations": [],
-    "courseFound": false  
-  }
-  ***EXAMPLE END***
-
-  If relevant courses are NOT found, but the stack is related to IT, return:
+  If relevant courses are NOT found, return:
   ***EXAMPLE START***
   OUTPUT FORMAT - raw JSON format:
   {
