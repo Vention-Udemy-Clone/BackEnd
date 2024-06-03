@@ -4,12 +4,14 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { CoursesModule } from './courses/courses.module';
 import { GeminiModule } from './gemini/gemini.module';
+import { LearningPathModule } from './learning-path/learning-path.module';
 import { LessonsModule } from './lessons/lessons.module';
 import { ModulesModule } from './modules/modules.module';
+import { NotesModule } from './notes/notes.module';
 import { PrismaModule } from './prisma/prisma.module';
-import { UserModule } from './user/user.module';
 import { QuizModule } from './quiz/quiz.module';
-import { LearningPathModule } from './learning-path/learning-path.module';
+import { UserModule } from './user/user.module';
+import { SummaryModule } from './summary/summary.module';
 
 @Module({
   imports: [
@@ -21,7 +23,9 @@ import { LearningPathModule } from './learning-path/learning-path.module';
     CoursesModule,
     GeminiModule,
     QuizModule,
+    NotesModule,
     LearningPathModule,
+    SummaryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -94,7 +94,7 @@ export class LessonsService {
       Your goal to generate a lesson ${body.context.toString().toLocaleLowerCase()} for a lesson titled "${body.title}".
       ${body.context === LessonContext.OVERVIEW ? 'The overview should be designed to help students learn the basics of the topic and build a strong foundation.' : 'The content should shortly cover the topic and provide a brief explanation.'}
     
-      Format shout be HTML. Use <h1> for the title and <p> for the content, use <strong>, <em> tags. If nesesary use <ul> and <li> for the list.
+      Format shout be HTML. Use <h1> for the title and <p> for the content, use <strong>, <em> tags. If necessary use <ul> and <li> for the list.
 
       Add line spacing between using <br> tag, but not more than 2 times in a row.
 
