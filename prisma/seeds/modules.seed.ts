@@ -33,6 +33,7 @@ export const ModulesSeed = [
     createdAt: new Date(),
     updatedAt: new Date(),
   },
+
   // Modules for "Full-Stack Web Development"
   {
     id: uuidv4(),
@@ -86,6 +87,8 @@ export const ModulesSeed = [
     createdAt: new Date(),
     updatedAt: new Date(),
   },
+
+  //10
   {
     id: uuidv4(),
     title: 'Python Data Structures',
@@ -157,6 +160,8 @@ export const ModulesSeed = [
     createdAt: new Date(),
     updatedAt: new Date(),
   },
+
+  //20
   {
     id: uuidv4(),
     title: 'Docker Volumes and Storage',
@@ -227,6 +232,8 @@ export const ModulesSeed = [
     createdAt: new Date(),
     updatedAt: new Date(),
   },
+
+  //30
   {
     id: uuidv4(),
     title: 'Vue.js Routing and State Management',
@@ -343,6 +350,176 @@ export const ModulesSeed = [
     id: uuidv4(),
     title: 'Django REST Framework',
     courseId: CoursesSeed[17].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: uuidv4(),
+    title: 'JavaScript Functions and Scope',
+    courseId: CoursesSeed[0].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: uuidv4(),
+    title: 'JavaScript Objects and Arrays',
+    courseId: CoursesSeed[0].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: uuidv4(),
+    title: 'JavaScript Asynchronous Programming',
+    courseId: CoursesSeed[0].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+
+  {
+    id: uuidv4(),
+    title: 'Kubernetes Architecture and Components',
+    courseId: CoursesSeed[15].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: uuidv4(),
+    title: 'Kubernetes Networking',
+    courseId: CoursesSeed[15].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: uuidv4(),
+    title: 'Kubernetes Storage',
+    courseId: CoursesSeed[15].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: uuidv4(),
+    title: 'Kubernetes Security',
+    courseId: CoursesSeed[15].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: uuidv4(),
+    title: 'Advanced Kubernetes Topics',
+    courseId: CoursesSeed[15].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: uuidv4(),
+    title: 'JavaScript Promises and Async/Await',
+    courseId: CoursesSeed[1].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: uuidv4(),
+    title: 'JavaScript Modules and ES6+ Features',
+    courseId: CoursesSeed[1].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: uuidv4(),
+    title: 'JavaScript Event Loop and Concurrency',
+    courseId: CoursesSeed[1].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: uuidv4(),
+    title: 'JavaScript Performance Optimization',
+    courseId: CoursesSeed[1].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: uuidv4(),
+    title: 'Introduction to Full-Stack Development',
+    courseId: CoursesSeed[2].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: uuidv4(),
+    title: 'HTML and CSS Fundamentals',
+    courseId: CoursesSeed[2].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: uuidv4(),
+    title: 'JavaScript Essentials',
+    courseId: CoursesSeed[2].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: uuidv4(),
+    title: 'Responsive Web Design',
+    courseId: CoursesSeed[2].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: uuidv4(),
+    title: 'Server-Side Scripting with Node.js',
+    courseId: CoursesSeed[2].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: uuidv4(),
+    title: 'Database Integration',
+    courseId: CoursesSeed[2].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: uuidv4(),
+    title: 'RESTful API Design',
+    courseId: CoursesSeed[2].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+
+  {
+    id: uuidv4(),
+    title: 'Working with React Props',
+    courseId: CoursesSeed[4].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: uuidv4(),
+    title: 'Managing State with Hooks',
+    courseId: CoursesSeed[4].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: uuidv4(),
+    title: 'Handling Forms in React',
+    courseId: CoursesSeed[4].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: uuidv4(),
+    title: 'React Router Basics',
+    courseId: CoursesSeed[4].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: uuidv4(),
+    title: 'Introduction to React Context',
+    courseId: CoursesSeed[4].id,
     createdAt: new Date(),
     updatedAt: new Date(),
   },

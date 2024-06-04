@@ -14,6 +14,7 @@ export class Course {
   };
   createdAt: Date;
   updatedAt: Date;
+  bgImageUrl: string;
 }
 export class CourseResponse {
   data: Course[];

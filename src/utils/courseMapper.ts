@@ -15,5 +15,6 @@ export const courseMapper = (course: Course) => {
     },
     createdAt: course.createdAt,
     updatedAt: course.updatedAt,
+    bgImageUrl: course.bgImageUrl,
   };
 };
