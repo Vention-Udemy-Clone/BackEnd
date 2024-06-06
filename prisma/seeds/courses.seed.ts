@@ -121,7 +121,7 @@ export const CoursesSeed: Course[] = [
     id: uuidv4(),
     bgImageUrl:
       'https://omeseo.co.uk/wp-content/uploads/2019/07/website_design.jpg',
-    title: 'Web Designing for Intermediate Level',
+    title: 'Web Designing',
     description:
       'Advance your web design skills with intermediate-level concepts and techniques.',
     authorId: '1',

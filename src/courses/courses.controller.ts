@@ -65,8 +65,8 @@ export class CoursesController {
     return await this.coursesService.generateDesc(body);
   }
 
-  @Post('generate-course')
-  async generateCourse(@Body() body: any) {
-    return await this.coursesService.generateCourse(body);
+  @Post('generate-content')
+  async generateContent(@Body() body: any) {
+    return await this.coursesService.generateContent(body);
   }
 }
