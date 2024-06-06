@@ -92,6 +92,7 @@ model Lesson {
   updatedAt     DateTime        @updatedAt
   Note          Note[]
   LessonSummary LessonSummary[]
+  Quiz          Quiz?
 }
 
 model Tag {
@@ -135,4 +136,23 @@ model LessonSummary {
   updatedAt DateTime @updatedAt
   user      User     @relation(fields: [userId], references: [id])
   lesson    Lesson   @relation(fields: [lessonId], references: [id])
+}
+
+model Quiz {
+  id        String          @id @default(cuid())
+  lessonId  String          @unique
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  lesson    Lesson          @relation(fields: [lessonId], references: [id])
+  content   Quiz_Question[]
+}
+
+model Quiz_Question {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String
+  quizId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  quiz      Quiz     @relation(fields: [quizId], references: [id])
 }
