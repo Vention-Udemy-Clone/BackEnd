@@ -3,7 +3,7 @@ import { Lesson } from '@prisma/client';
 import { GlobalException } from 'src/exceptions/global.exception';
 import { GeminiService } from 'src/gemini/gemini.service';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { configPrompt } from 'src/shared/prompts/lesson-chat.prompt';
+import { configPrompt } from 'src/shared/prompts';
 import { LessonContext } from 'src/shared/types/auth-user.types';
 import { formatChatHistory } from 'src/utils/formatChatHistory';
 import { CreateLessonDto } from './dto/create-lesson.dto';
@@ -94,9 +94,7 @@ export class LessonsService {
       Your goal to generate a lesson ${body.context.toString().toLocaleLowerCase()} for a lesson titled "${body.title}".
       ${body.context === LessonContext.OVERVIEW ? 'The overview should be designed to help students learn the basics of the topic and build a strong foundation.' : 'The content should shortly cover the topic and provide a brief explanation.'}
     
-      Format shout be HTML. Use <h1> for the title and <p> for the content, use <strong>, <em> tags. If necessary use <ul> and <li> for the list.
-
-      Add line spacing between using <br> tag, but not more than 2 times in a row.
+      Use HTML formatting to make the content more readable. Such as using <h1> for the title and <p> for the content. You can also use <strong>, <em> tags. If necessary, use <ul> and <li> for the list. Add line spacing between using <br> tag, but not more than 2 times in a row.
 
       The words counts cannot be less than 50 words.
 

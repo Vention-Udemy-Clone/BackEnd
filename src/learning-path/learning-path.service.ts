@@ -1,14 +1,14 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
-  BadRequestException,
 } from '@nestjs/common';
+import { Level } from '@prisma/client';
+import { learningPathPrompt } from 'src/shared/prompts';
+import { levelMapper } from 'src/utils/levelMapper';
 import { GeminiService } from '../gemini/gemini.service';
 import { PrismaService } from '../prisma/prisma.service';
-import { learningPathPrompt } from '../shared/prompts/learning-path.prompt';
-import { Level } from '@prisma/client';
 import { LearningPathResult } from './entities/learning-path.entity';
-import { levelMapper } from 'src/utils/levelMapper';
 
 @Injectable()
 export class LearningPathService {

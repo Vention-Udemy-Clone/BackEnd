@@ -66,17 +66,14 @@ export class ModulesService {
   async deleteModule(id: string) {
     await this.getModuleById(id);
     try {
-      const lessonsInModule = await this.prisma.lesson.findMany({
+      await this.prisma.lesson.deleteMany({
         where: { moduleId: id },
-      });
-
-      lessonsInModule.forEach(async (lesson) => {
-        await this.prisma.lesson.delete({ where: { id: lesson.id } });
       });
 
       const deletedModule = await this.prisma.module.delete({
         where: { id },
       });
+
       return deletedModule;
     } catch (error) {
       throw new GlobalException('Failed to delete module', error.message);
