@@ -16,10 +16,10 @@ export const generateContentPrompt = ({ title, level }) => {
   {
     "modules": [
       {
-        "title": "Module 1",
+        "title": "[module title]",
         "lessons": [
-          {title: "Lesson title"},
-          {title: "Lesson title"}
+          {title: "[Lesson title]"},
+          {title: "[Lesson title]"}
         ]
       }
     ]
